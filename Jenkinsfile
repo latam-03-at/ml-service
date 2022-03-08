@@ -14,6 +14,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh "cd /var/jenkins_home/workspace/ml-service"
+                sh "sudo apt install python2.7"
                 sh "npm install"
             }
         }

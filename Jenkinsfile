@@ -27,8 +27,10 @@ pipeline {
 
         stage('Create Files') {
             steps {
-                sh "curl http://localhost:8088/repository/content-media/ml-media/files.zip --output /__test__/files/files.zip"
-                sh "cd __test__/files/"
+                sh "cd __test__"
+                sh "mkdir files"
+                sh "curl http://localhost:8088/repository/content-media/ml-media/files.zip --output /files/files.zip"
+                sh "cd files"
                 sh "unzip files.zip"
             }
         }

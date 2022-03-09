@@ -1,27 +1,45 @@
 pipeline {
-    agent any
-    
+    agent { label 'project' }
+
     tools {
-        nodejs '16.13.2'
+        nodejs 'NodeJS'
     }
-    
+
+
     stages {
-        stage('Clone repo') {
+        /*stage('Clone repo') {
             steps {
                 git branch: 'main', url: 'https://github.com/latam-03-at/ml-service'
             }
-        }
-        stage('Build') {
+        }*/
+        stage('Python') {
             steps {
-                sh "cd /var/jenkins_home/workspace/ml-service"
+                echo "install python"
+                sh "sudo apt-get install -y python build-essential"
+                sh "python -V"
+            }
+        }
+        stage('Install') {
+            steps {
                 sh "npm install"
             }
         }
-        stage('Build service app') {
+
+        stage('Create Files') {
             steps {
-                sh "cd /var/jenkins_home/workspace/ml-service"
+                sh "curl http://localhost:8088/repository/content-media/ml-media/files.zip --output ${WORKSPACE}/files.zip"
+                sh "unzip files.zip"
+                sh "mv files __test__"
+
+            }
+        }
+
+        stage('Unit Tests & Coverage') {
+            steps {
                 sh "npm test"
             }
         }
     }
 }
+        
+        

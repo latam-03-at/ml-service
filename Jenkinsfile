@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'agent_project' }
+    agent { label 'project' }
 
     tools {
         nodejs 'NodeJS'
@@ -7,15 +7,20 @@ pipeline {
 
 
     stages {
-    // Continuous Integration Pipeline
         stage('Clone repo') {
             steps {
                 git branch: 'main', url: 'https://github.com/latam-03-at/ml-service'
             }
         }
+        stage('Python') {
+            steps {
+                echo "install python"
+                sh "sudo apt-get install -y python build-essential"
+                sh "python -V"
+            }
+        }
         stage('Install') {
             steps {
-                sh "sudo apt install python2.7"
                 sh "npm install"
             }
         }

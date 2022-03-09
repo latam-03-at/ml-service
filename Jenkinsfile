@@ -27,6 +27,7 @@ pipeline {
 
         stage('Create Files') {
             steps {
+                sh "cd ${WORKSPACE}"
                 sh "cd __test__"
                 sh "mkdir files"
                 sh "curl http://localhost:8088/repository/content-media/ml-media/files.zip --output /files/files.zip"

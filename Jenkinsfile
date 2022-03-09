@@ -29,7 +29,8 @@ pipeline {
             steps {
                 sh "curl http://localhost:8088/repository/content-media/ml-media/files.zip --output ${WORKSPACE}/files.zip"
                 sh "unzip files.zip"
-                
+                sh "mv files __test__"
+
             }
         }
 

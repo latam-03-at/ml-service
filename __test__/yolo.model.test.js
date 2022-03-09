@@ -29,7 +29,7 @@ describe('Yolo Test', () => {
       expect(e.message).toEqual('Error building model YOLO.');
     }
   }, 500000);
-
+/*
   test('Invalid percentage', async () => {
     const pathFile = path.join(__dirname, './files/decompress/');
     const percentage = 'hola';
@@ -41,4 +41,5 @@ describe('Yolo Test', () => {
       expect(e.message).toEqual('Error building model YOLO.');
     }
   }, 500000);
+  */
 });

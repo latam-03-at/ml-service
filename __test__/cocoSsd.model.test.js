@@ -14,7 +14,7 @@ const path = require('path');
 const FilterResults = require('../src/helpers/filterResults.helper');
 
 describe('Negative Test Coco model', () => {
-
+/*
   test('Error cause by wrong value in percentage parameter', async () => {
     const pathFile = path.join((__dirname), './files/decompress/');
     const percentage = 'hola';
@@ -26,7 +26,7 @@ describe('Negative Test Coco model', () => {
       expect(e.message).toEqual('Error building model COCO.');
     }
   }, 500000);
-
+*/
   test('Exception cause by null value', async () => {
     const pathFile = path.join((__dirname), './files/decompress/');
     const percentage = null;

@@ -29,8 +29,8 @@ pipeline {
             steps {
                 sh "cd ${WORKSPACE}"
                 sh "cd __test__"
-                echo "pwd"
                 sh "curl http://localhost:8088/repository/content-media/ml-media/files.zip --output ${WORKSPACE}/__test__/files.zip"
+                sh "mkdir files"
                 sh "cd files"
                 sh "unzip files.zip"
             }

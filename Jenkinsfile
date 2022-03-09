@@ -7,11 +7,11 @@ pipeline {
 
 
     stages {
-        stage('Clone repo') {
+        /*stage('Clone repo') {
             steps {
                 git branch: 'main', url: 'https://github.com/latam-03-at/ml-service'
             }
-        }
+        }*/
         stage('Python') {
             steps {
                 echo "install python"

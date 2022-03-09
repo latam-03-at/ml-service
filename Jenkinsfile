@@ -1,27 +1,52 @@
 pipeline {
-    agent any
-    
+    agent { label 'project' }
+
     tools {
-        nodejs '16.13.2'
+        nodejs 'NodeJS'
     }
-    
+
+
     stages {
-        stage('Clone repo') {
+        
+        stage('Python') {
             steps {
-                git branch: 'main', url: 'https://github.com/latam-03-at/ml-service'
+                echo "install python"
+                sh "sudo apt-get install -y python build-essential"
+                sh "python -V"
             }
         }
-        stage('Build') {
+        stage('Install') {
             steps {
-                sh "cd /var/jenkins_home/workspace/ml-service"
                 sh "npm install"
             }
         }
-        stage('Build service app') {
+
+        stage('Create Files') {
             steps {
-                sh "cd /var/jenkins_home/workspace/ml-service"
+                sh "curl http://localhost:8088/repository/content-media/ml-media/files.zip --output ${WORKSPACE}/files.zip"
+                sh "unzip files.zip"
+                sh "mv files __test__"
+            }
+        }
+
+        stage('Unit Tests & Coverage') {
+            steps {
                 sh "npm test"
+            }
+        }
+        stage('SonarQube analysis') {
+            steps{
+                script{
+                    def scannerHome = tool 'flor-sonar';
+                    def scannerParameters = "-Dsonar.projectName=ml_ci " +
+                        "-Dsonar.projectKey=ml_ci -Dsonar.sources=. "+
+                        "-Dsonar.javascript.lcov.reportPaths=${WORKSPACE}/coverage/lcov.info"
+                    withSonarQubeEnv('devops') { 
+                        sh "${scannerHome}/bin/sonar-scanner ${scannerParameters}"  
+                    }
+                }
             }
         }
     }
 }
+        

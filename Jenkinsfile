@@ -24,6 +24,14 @@ pipeline {
                 //sh "cd __test__/; yes | unzip files.zip"
                 sh "unzip ${WORKSPACE}/__test__/files.zip -d ${WORKSPACE}/__test__/files"
             }
+            post {
+                always{
+                    script{
+                        sh "rm -rf ${WORKSPACE}/__test__/files"
+                        sh "rm -f ${WORKSPACE}/__test__/files.zip"
+                    }
+                }
+            }
         }
         stage('Unit Tests & Coverage') {
             steps {

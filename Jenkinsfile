@@ -4,12 +4,13 @@ pipeline {
     tools {
         nodejs 'NodeJS'
     }
-
-
+    
     stages {
-        /*stage('Clone repo') {
+        stage('Python') {
             steps {
-                git branch: 'main', url: 'https://github.com/latam-03-at/ml-service'
+                echo "install python"
+                sh "sudo apt-get install -y python build-essential"
+                sh "python -V"
             }
         }*/
         stage('Python') {
@@ -30,7 +31,6 @@ pipeline {
                 sh "curl http://localhost:8088/repository/content-media/ml-media/files.zip --output ${WORKSPACE}/files.zip"
                 sh "unzip files.zip"
                 sh "mv files __test__"
-
             }
         }
 
@@ -39,7 +39,19 @@ pipeline {
                 sh "npm test"
             }
         }
+        stage('SonarQube analysis') {
+            steps{
+                script{
+                    def scannerHome = tool 'flor-sonar';
+                    def scannerParameters = "-Dsonar.projectName=ml_ci " +
+                        "-Dsonar.projectKey=ml_ci -Dsonar.sources=. "+
+                        "-Dsonar.javascript.lcov.reportPaths=${WORKSPACE}/coverage/lcov.info"
+                    withSonarQubeEnv('devops') { 
+                        sh "${scannerHome}/bin/sonar-scanner ${scannerParameters}"  
+                    }
+                }
+            }
+        }
     }
 }
-        
         

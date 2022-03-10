@@ -21,7 +21,6 @@ pipeline {
         stage('Create Files') {
             steps {
                 sh "curl http://localhost:8088/repository/content-media/ml-media/files.zip --output ${WORKSPACE}/__test__/files.zip"
-                //sh "cd __test__/; yes | unzip files.zip"
                 sh "unzip ${WORKSPACE}/__test__/files.zip -d ${WORKSPACE}/__test__"
             }
         }
@@ -54,14 +53,6 @@ pipeline {
         stage("Quality Gate"){
             steps{
                 waitForQualityGate abortPipeline: true
-                /*script{
-                    timeout(time: 1, unit: 'HOURS') { 
-                        def qg = waitForQualityGate() 
-                        if (qg.status != 'OK') {
-                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
-                        }
-                    }
-                }*/
             }
         }
     }

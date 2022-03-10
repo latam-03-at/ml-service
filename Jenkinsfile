@@ -24,6 +24,11 @@ pipeline {
                 //sh "cd __test__/; yes | unzip files.zip"
                 sh "unzip ${WORKSPACE}/__test__/files.zip -d ${WORKSPACE}/__test__/files"
             }
+        }
+        stage('Unit Tests & Coverage') {
+            steps {
+                sh "npm test"
+            }
             post {
                 always{
                     script{
@@ -31,11 +36,6 @@ pipeline {
                         sh "rm -f ${WORKSPACE}/__test__/files.zip"
                     }
                 }
-            }
-        }
-        stage('Unit Tests & Coverage') {
-            steps {
-                sh "npm test"
             }
         }
         stage('SonarQube analysis') {

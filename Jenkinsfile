@@ -1,23 +1,59 @@
 pipeline {
-    agent any
+
+    agent { label 'project' }
+
     tools {
         nodejs 'NodeJS'
     }
+
     stages {
-        stage('Stage 1') {
+        stage('Python') {
             steps {
-                echo 'Hello world!' 
+                echo "install python"
+                sh "sudo apt-get install -y python build-essential"
+                sh "python -V"
             }
         }
-        stage('Stage 2') {
+        stage('Install') {
             steps {
-                git branch: 'main', url: 'https://github.com/latam-03-at/ml-service.git'
+                sh "npm install"
             }
         }
-        stage('Stage 3') {
+        stage('Create Files') {
             steps {
-                sh 'apt-get update || : && apt-get install -y python build-essential'
-                sh 'cd /var/jenkins_home/workspace/ml-service'
+                sh "curl http://localhost:8088/repository/content-media/ml-media/files.zip --output ${WORKSPACE}/__test__/files.zip"
+                sh "unzip ${WORKSPACE}/__test__/files.zip -d ${WORKSPACE}/__test__"
+            }
+        }
+        stage('Unit Tests & Coverage') {
+            steps {
+                sh "npm test"
+            }
+            post {
+                always{
+                    script{
+                        sh "rm -rf ${WORKSPACE}/__test__/files"
+                        sh "rm -f ${WORKSPACE}/__test__/files.zip"
+                    }
+                }
+            }
+        }
+        stage('SonarQube analysis') {
+            steps{
+                script{
+                    def scannerHome = tool 'flor-sonar';
+                    def scannerParameters = "-Dsonar.projectName=ml_ci " +
+                        "-Dsonar.projectKey=ml_ci -Dsonar.sources=. "+
+                        "-Dsonar.javascript.lcov.reportPaths=${WORKSPACE}/coverage/lcov.info"
+                    withSonarQubeEnv('devops') { 
+                        sh "${scannerHome}/bin/sonar-scanner ${scannerParameters}"  
+                    }
+                }
+            }
+        }
+        stage("Quality Gate"){
+            steps{
+                waitForQualityGate abortPipeline: true
             }
         }
     }

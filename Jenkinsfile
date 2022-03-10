@@ -4,10 +4,15 @@ pipeline {
     tools {
         nodejs 'NodeJS'
     }
-
-
+    
     stages {
-        
+        stage('Python') {
+            steps {
+                echo "install python"
+                sh "sudo apt-get install -y python build-essential"
+                sh "python -V"
+            }
+        }*/
         stage('Python') {
             steps {
                 echo "install python"

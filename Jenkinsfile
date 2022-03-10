@@ -4,15 +4,8 @@ pipeline {
     tools {
         nodejs 'NodeJS'
     }
-    
+
     stages {
-        stage('Python') {
-            steps {
-                echo "install python"
-                sh "sudo apt-get install -y python build-essential"
-                sh "python -V"
-            }
-        }*/
         stage('Python') {
             steps {
                 echo "install python"
@@ -25,18 +18,23 @@ pipeline {
                 sh "npm install"
             }
         }
-
         stage('Create Files') {
             steps {
-                sh "curl http://localhost:8088/repository/content-media/ml-media/files.zip --output ${WORKSPACE}/files.zip"
-                sh "unzip files.zip"
-                sh "mv files __test__"
+                sh "curl http://localhost:8088/repository/content-media/ml-media/files.zip --output ${WORKSPACE}/__test__/files.zip"
+                sh "unzip ${WORKSPACE}/__test__/files.zip -d ${WORKSPACE}/__test__"
             }
         }
-
         stage('Unit Tests & Coverage') {
             steps {
                 sh "npm test"
+            }
+            post {
+                always{
+                    script{
+                        sh "rm -rf ${WORKSPACE}/__test__/files"
+                        sh "rm -f ${WORKSPACE}/__test__/files.zip"
+                    }
+                }
             }
         }
         stage('SonarQube analysis') {
@@ -50,6 +48,11 @@ pipeline {
                         sh "${scannerHome}/bin/sonar-scanner ${scannerParameters}"  
                     }
                 }
+            }
+        }
+        stage("Quality Gate"){
+            steps{
+                waitForQualityGate abortPipeline: true
             }
         }
     }

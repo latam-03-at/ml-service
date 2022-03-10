@@ -13,19 +13,11 @@ pipeline {
                 sh "python -V"
             }
         }
-        stage('Python') {
-            steps {
-                echo "install python"
-                sh "sudo apt-get install -y python build-essential"
-                sh "python -V"
-            }
-        }
         stage('Install') {
             steps {
                 sh "npm install"
             }
         }
-
         stage('Create Files') {
             steps {
                 sh "curl http://localhost:8088/repository/content-media/ml-media/files.zip --output ${WORKSPACE}/files.zip"
@@ -33,7 +25,6 @@ pipeline {
                 sh "mv files __test__"
             }
         }
-
         stage('Unit Tests & Coverage') {
             steps {
                 sh "npm test"

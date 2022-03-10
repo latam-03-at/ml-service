@@ -4,7 +4,7 @@ pipeline {
     tools {
         nodejs 'NodeJS'
     }
-    
+
     stages {
         stage('Python') {
             steps {
@@ -12,7 +12,7 @@ pipeline {
                 sh "sudo apt-get install -y python build-essential"
                 sh "python -V"
             }
-        }*/
+        }
         stage('Python') {
             steps {
                 echo "install python"
@@ -48,6 +48,18 @@ pipeline {
                         "-Dsonar.javascript.lcov.reportPaths=${WORKSPACE}/coverage/lcov.info"
                     withSonarQubeEnv('devops') { 
                         sh "${scannerHome}/bin/sonar-scanner ${scannerParameters}"  
+                    }
+                }
+            }
+        }
+        stage("Quality Gate"){
+            steps{
+                script{
+                    timeout(time: 1, unit: 'HOURS') { 
+                        def qg = waitForQualityGate('devops') 
+                        if (qg.status != 'OK') {
+                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                        }
                     }
                 }
             }

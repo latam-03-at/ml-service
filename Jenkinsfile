@@ -21,8 +21,7 @@ pipeline {
         stage('Create Files') {
             steps {
                 sh "curl http://localhost:8088/repository/content-media/ml-media/files.zip --output ${WORKSPACE}/files.zip"
-                sh "unzip files.zip"
-                sh "mv files __test__"
+                sh "cd __test__/; yes | unzip files.zip"
             }
         }
         stage('Unit Tests & Coverage') {

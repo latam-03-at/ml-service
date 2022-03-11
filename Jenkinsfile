@@ -61,9 +61,9 @@ pipeline {
         }
         stage('Upload to docker hub'){
             steps {
-                sh 'docker-compose build --network=ml-service -t luisdavidparra/ml-service:${BUILD_NUMBER} .'
+                sh 'docker build -t luisdavidparra/ml-service:${BUILD_NUMBER} .'
                 sh 'docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW'
-                sh 'docker-compose push luisdavidparra/ml-service:${BUILD_NUMBER}'
+                sh 'docker push luisdavidparra/ml-service:${BUILD_NUMBER}'
             }
             post {
                 always {
@@ -74,11 +74,11 @@ pipeline {
             }
         }
         //aqu empezamos con CD
-        /*stage('Starting container'){
+        stage('Starting container'){
             steps {
                 sh "docker-compose up -d "
             }
-        }
+        }/*
         stage('validate container'){
             steps {
                 sh "docker ps"

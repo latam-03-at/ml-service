@@ -55,5 +55,12 @@ pipeline {
                 waitForQualityGate abortPipeline: true
             }
         }
+        stage('Upload to docker hub'){
+            steps {
+                sh 'docker build -t luisdavidparra/ml-service .'
+                sh 'docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW'
+                sh 'docker push luisdavidparra/ml-service'
+            }
+        }
     }
 }

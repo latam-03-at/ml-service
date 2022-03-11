@@ -65,11 +65,11 @@ pipeline {
                 sh 'docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW'
                 sh 'docker push luisdavidparra/ml-service'
             }
-        }
-        post {
-            always{
-                script{
-                    sh 'docker logout'
+            post {
+                always{
+                    script{
+                        sh 'docker logout'
+                    }
                 }
             }
         }

@@ -66,5 +66,12 @@ pipeline {
                 sh 'docker push luisdavidparra/ml-service'
             }
         }
+        post {
+            always{
+                script{
+                    sh 'docker logout'
+                }
+            }
+        }
     }
 }

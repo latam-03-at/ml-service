@@ -61,7 +61,7 @@ pipeline {
         }
         stage('Upload to docker hub'){
             steps {
-                sh 'docker-compose build -t luisdavidparra/ml-service:${BUILD_NUMBER} .'
+                sh 'docker-compose build --network=ml-service -t luisdavidparra/ml-service:${BUILD_NUMBER} .'
                 sh 'docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW'
                 sh 'docker-compose push luisdavidparra/ml-service:${BUILD_NUMBER}'
             }

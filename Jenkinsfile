@@ -5,7 +5,7 @@ pipeline {
         nodejs 'NodeJS'
     }
     environment {
-        DOCKER_HUB_CREDENTIALS = credentials("florpadilla_dockerhub")
+        DOCKERHUB_CREDENTIALS = credentials('florpadilla_dockerhub')
     }
 
     stages {
@@ -58,11 +58,6 @@ pipeline {
                 waitForQualityGate abortPipeline: true
             }
         }
-        stage("Building image"){
-            steps{
-                sh "docker build -t florpadilla/ml-service:${BUILD_NUMBER} ."
-            }
-        }
 
         stage("Push image in dockerhub"){
             environment {
@@ -70,6 +65,7 @@ pipeline {
         	}
             
 			steps {
+                sh "docker build -t florpadilla/ml-service:${BUILD_NUMBER} ."
 				sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
 			    sh "docker push florpadilla/ml-service:${BUILD_NUMBER}"
 			}

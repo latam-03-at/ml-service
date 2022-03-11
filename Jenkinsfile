@@ -5,6 +5,10 @@ pipeline {
         nodejs 'NodeJS'
     }
 
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('david_dockerhub')
+    }
+    
     stages {
         stage('Python') {
             steps {
@@ -55,6 +59,19 @@ pipeline {
                 waitForQualityGate abortPipeline: true
             }
         }
+        stage('Upload to docker hub'){
+            steps {
+                sh 'docker build -t luisdavidparra/ml-service .'
+                sh 'docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW'
+                sh 'docker push luisdavidparra/ml-service'
+            }
+        }
+        post {
+            always{
+                script{
+                    sh 'docker logout'
+                }
+            }
+        }
     }
 }
-        

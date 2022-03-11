@@ -5,6 +5,10 @@ pipeline {
         nodejs 'NodeJS'
     }
 
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('david_dockerhub')
+    }
+    
     stages {
         stage('Python') {
             steps {

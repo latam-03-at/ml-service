@@ -55,6 +55,29 @@ pipeline {
                 waitForQualityGate abortPipeline: true
             }
         }
+        stage("Building image"){
+            steps{
+                sh "docker build -t florpadilla/ml-service:${BUILD_NUMBER} ."
+            }
+        }
+
+        stage("Push image in dockerhub"){
+            environment {
+                DOCKERHUB_CREDENTIALS = credentials("florpadilla_dockerhub")
+        	}
+            
+			steps {
+				sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
+			    sh "docker push florpadilla/ml-service:${BUILD_NUMBER}"
+			}
+
+			post {
+			    always {
+			        sh 'docker logout'
+			    }
+			}
+		}
+        }
     }
 }
         

@@ -4,6 +4,9 @@ pipeline {
     tools {
         nodejs 'NodeJS'
     }
+    environment {
+        DOCKER_HUB_CREDENTIALS = credentials("florpadilla_dockerhub")
+    }
 
     stages {
         stage('Python') {

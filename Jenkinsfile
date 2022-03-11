@@ -4,10 +4,11 @@ pipeline {
     tools {
         nodejs 'NodeJS'
     }
-    environment {
-        DOCKERHUB_CREDENTIALS = credentials('florpadilla_dockerhub')
-    }
 
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('david_dockerhub')
+    }
+    
     stages {
         stage('Python') {
             steps {
@@ -58,24 +59,24 @@ pipeline {
                 waitForQualityGate abortPipeline: true
             }
         }
-
-        stage("Push image in dockerhub"){
-            environment {
-                DOCKERHUB_CREDENTIALS = credentials("florpadilla_dockerhub")
-        	}
-            
-			steps {
-                sh "docker build -t florpadilla/ml-service:${BUILD_NUMBER} ."
-				sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
-			    sh "docker push florpadilla/ml-service:${BUILD_NUMBER}"
-			}
-
-			post {
-			    always {
-			        sh 'docker logout'
-			    }
-			}
-		}
+        stage('Upload to docker hub'){
+            steps {
+                sh 'docker build -t luisdavidparra/ml-service:${BUILD_NUMBER} .'
+                sh 'docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW'
+                sh 'docker push luisdavidparra/ml-service:${BUILD_NUMBER}'
+            }
+            post {
+                always {
+                    script {
+                        sh 'docker logout'
+                    }
+                }
+            }
+        }
+        /*stage('Deployment'){
+            steps {
+                sh 
+            }
+        }*/
     }
 }
-        

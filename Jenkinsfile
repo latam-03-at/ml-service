@@ -74,15 +74,10 @@ pipeline {
             }
         }
         //aqu empezamos con CD
-        stage('Starting container'){
-            steps {
-                sh "docker-compose up -d "
-            }
-        }/*
         stage('validate container'){
             steps {
-                sh "docker ps"
+                sh 'bash validate-container.sh'
             }
-        }*/
+        }
     }
 }

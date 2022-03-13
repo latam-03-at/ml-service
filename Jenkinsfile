@@ -79,12 +79,14 @@ pipeline {
         stage('Deploy to staging'){
             steps {
                 sh 'bash validate-container.sh' 
-                sh "docker run -d --name ml-service -p 3000:3000 luisdavidparra/ml-service:$IMAGE_TAG_STG"
+                sh "docker-compose up -d --name ml-service luisdavidparra/ml-service:$IMAGE_TAG_STG"
+                //sh "docker run -d --name ml-service -p 3000:3000 luisdavidparra/ml-service:$IMAGE_TAG_STG"
                 //sleep 60
             }
         }
         stage ('User Acceptance Tests que SI pasara') {
             steps {
+                sh "curl -i -X POST -H 'Content-type: multipart/form-data' -F images=@Downloads/dog.jpeg -F model="coco" -F object="dog" -F percentage=0.5 http://localhost:3000/api/v1/recognize-objects"
                 //sh "cd /Users/ubuntu/Downloads curl -i -X POST -H 'Content-type: multipart/form-data' -F images=@dog.jpg -F model="coco" -F object="dog" -F percentage=0.5 10.26.32.243:3000/api/v1/recognize-objects"
                 sh "curl -I 10.26.32.243:3000/api/v1/recognize-objects --silent | grep 404"
             }

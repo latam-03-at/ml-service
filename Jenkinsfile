@@ -84,6 +84,7 @@ pipeline {
         }
         stage ('User Acceptance Tests que SI pasara') {
             steps {
+                sh "curl -i -X POST -H 'Content-type: multipart/form-data' -F images=@Downloads/dog.jpg -F model="coco" -F object="dog" -F percentage=0.5 http://localhost:3000/api/v1/recognize-objects"
                 sh "curl -I 10.26.32.243:3000/api/v1/recognize-objects --silent | grep 404"
             }
         }
@@ -95,7 +96,8 @@ pipeline {
 
         stage('Deliver Image for Production') {
             steps {
-                sh "docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW --password-stdin"
+                sh "echo $DOCKER_HUB_CREDENTIALS_PSW' | docker login -u $DOCKER_HUB_CREDENTIALS_USR --password-stdin"
+                //sh "docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW"
                 sh "docker push $FULL_IMAGE_NAME:$IMAGE_TAG_PROD"
             }
             post {

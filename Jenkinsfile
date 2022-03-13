@@ -76,7 +76,7 @@ pipeline {
         //aqu empezamos con CD
         stage('validate container'){
             steps {
-                sh 'bash validate-container.sh'
+                sh 'bash validate-container2.sh'
             }
         }
     }

@@ -63,9 +63,9 @@ pipeline {
         }
         stage('Upload to docker hub'){
             steps {
-                sh "docker build -t luisdavidparra/ml-service:${BUILD_NUMBER} ."
+                sh "docker build -t luisdavidparra/ml-service:$IMAGE_TAG_STG  ."
                 sh "docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW"
-                sh "docker push luisdavidparra/ml-service:${BUILD_NUMBER}"
+                sh "docker push luisdavidparra/ml-service:$IMAGE_TAG_STG "
             }
             post {
                 always {
@@ -79,8 +79,8 @@ pipeline {
         stage('Deploy to staging'){
             steps {
                 sh 'bash validate-container.sh' 
-                sh "docker run -d --name ml-service luisdavidparra/ml-service:${BUILD_NUMBER}"
-                sleep 60
+                sh "docker run -d --name ml-service -p 3000:3000 luisdavidparra/ml-service:$IMAGE_TAG_STG"
+                //sleep 60
             }
         }
         stage ('User Acceptance Tests que SI pasara') {

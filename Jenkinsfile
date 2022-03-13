@@ -85,5 +85,10 @@ pipeline {
                 sh "curl -I 10.26.32.243:3000/api/v1/recognize-objects --silent | grep 404"
             }
         }
+        stage ('User Acceptance Tests que NO pasara') {
+            steps {
+                sh "curl -I 10.26.32.243:3000/api/v1/recognize-objects --silent | grep 403453454"
+            }
+        }
     }
 }

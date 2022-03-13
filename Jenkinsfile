@@ -80,7 +80,7 @@ pipeline {
             steps {
                 sh 'bash validate-container.sh' 
                 sh "docker run -d --name ml-service luisdavidparra/ml-service:${BUILD_NUMBER}"
-                time.sleep(120)
+                sleep 60
             }
         }
         stage ('User Acceptance Tests que SI pasara') {

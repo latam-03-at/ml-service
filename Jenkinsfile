@@ -80,9 +80,9 @@ pipeline {
             steps {
                 //sh 'bash validate-container.sh' 
                 sh """
-                var=$(docker ps -a --filter name=ml-service -q)
-                up=$(docker ps -a --filter name=ml-service --filter status=running -q)
-                exited=$(docker ps -a --filter name=ml-service --filter status=exited -q)
+                var=${(docker ps -a --filter name=ml-service -q)}
+                up=${(docker ps -a --filter name=ml-service --filter status=running -q)}
+                exited=${(docker ps -a --filter name=ml-service --filter status=exited -q)}
                 if [ ! -z "$var" ];
                 then
 	                if [ ! -z "$up" ];

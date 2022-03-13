@@ -84,7 +84,7 @@ pipeline {
         }
         stage ('User Acceptance Tests que SI pasara') {
             steps {
-                sh "curl -i -X POST -H 'Content-type: multipart/form-data' -F images=@Downloads/dog.jpg -F model="coco" -F object="dog" -F percentage=0.5 http://localhost:3000/api/v1/recognize-objects"
+                sh "cd /Users/ubuntu/Downloads curl -i -X POST -H 'Content-type: multipart/form-data' -F images=@dog.jpg -F model="coco" -F object="dog" -F percentage=0.5 10.26.32.243:3000/api/v1/recognize-objects"
                 sh "curl -I 10.26.32.243:3000/api/v1/recognize-objects --silent | grep 404"
             }
         }

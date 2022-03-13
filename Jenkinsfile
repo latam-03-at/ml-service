@@ -77,13 +77,12 @@ pipeline {
         stage('Deploy to staging'){
             steps {
                 sh 'bash validate-container2.sh' 
-                sh "curl -I http://localhost:3000/api/v1/recognize-objects --silent | grep 404"
             }
         }
         
-        stage ('User Acceptance Tests que no pasara') {
+        stage ('User Acceptance Tests que SI pasara') {
             steps {
-                sh "curl -I http://localhost:3000/api/v1/recognize-objects --silent | grep 403454"
+                sh "curl -I 10.26.32.243:3000/api/v1/recognize-objects --silent | grep 404"
             }
         }
     }

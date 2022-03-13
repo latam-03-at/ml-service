@@ -89,7 +89,6 @@ pipeline {
         }
         stage ('Tag Production Image') {
             steps {
-                sh "docker tag luisdavidparra/ml-service:$IMAGE_TAG_PROD"
                 sh "docker tag luisdavidparra/ml-service:$IMAGE_TAG_STG luisdavidparra/ml-service:$IMAGE_TAG_PROD"
             }
         }

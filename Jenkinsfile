@@ -78,7 +78,25 @@ pipeline {
         //aqui empezamos con CD
         stage('Deploy to staging'){
             steps {
-                sh 'bash validate-container.sh' 
+                //sh 'bash validate-container.sh' 
+                sh """
+                var=$(docker ps -a --filter name=ml-service -q)
+                up=$(docker ps -a --filter name=ml-service --filter status=running -q)
+                exited=$(docker ps -a --filter name=ml-service --filter status=exited -q)
+                if [ ! -z "$var" ];
+                then
+	                if [ ! -z "$up" ];
+	                then
+		                echo "existe y esta corriendo"
+		                docker stop $up
+		                docker rm $up
+	                elif [ ! -z "$exited" ];
+	                then
+		                echo "exite y no esta corriendo"
+		                docker rm $exited
+	                fi
+                fi
+                """
                 sh "docker run -d --name ml-service luisdavidparra/ml-service:${BUILD_NUMBER}"
             }
         }

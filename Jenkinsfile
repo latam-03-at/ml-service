@@ -63,9 +63,9 @@ pipeline {
         }
         stage('Upload to docker hub'){
             steps {
-                sh 'docker build -t luisdavidparra/ml-service:${BUILD_NUMBER} .'
-                sh 'docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW'
-                sh 'docker push luisdavidparra/ml-service:${BUILD_NUMBER}'
+                sh "docker build -t luisdavidparra/ml-service:${BUILD_NUMBER} ."
+                sh "docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW"
+                sh "docker push luisdavidparra/ml-service:${BUILD_NUMBER}"
             }
             post {
                 always {
@@ -90,12 +90,13 @@ pipeline {
         stage ('Tag Production Image') {
             steps {
                 sh "docker tag luisdavidparra/ml-service:$IMAGE_TAG_PROD"
+                sh "docker tag luisdavidparra/ml-service:$IMAGE_TAG_STG luisdavidparra/ml-service:$IMAGE_TAG_PROD"
             }
         }
 
         stage('Deliver Image for Production') {
             steps {
-                sh "docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW"
+                sh "docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW --password-stdin"
                 sh "docker push $FULL_IMAGE_NAME:$IMAGE_TAG_PROD"
             }
             post {

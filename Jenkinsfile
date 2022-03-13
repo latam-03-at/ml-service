@@ -76,7 +76,8 @@ pipeline {
         //aqui empezamos con CD
         stage('Deploy to staging'){
             steps {
-                sh 'bash validate-container2.sh' 
+                //sh 'bash validate-container2.sh' 
+                sh "docker-compose up -d"
             }
         }
         

@@ -78,8 +78,8 @@ pipeline {
         //aqui empezamos con CD
         stage('Deploy to staging'){
             steps {
-                //sh 'bash validate-container2.sh' 
-                sh "docker-compose up -d"
+                sh 'bash validate-container.sh' 
+                sh "docker run -d --name ml-service luisdavidparra/ml-service:${BUILD_NUMBER}"
             }
         }
         stage ('User Acceptance Tests que SI pasara') {

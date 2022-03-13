@@ -78,10 +78,13 @@ pipeline {
         //aqui empezamos con CD
         stage('Deploy to staging'){
             steps {
+                sh "docker-compose up -d --scale ml-service=2 --force-recreate"
+                sleep 15
+                /*
                 sh 'bash validate-container.sh' 
                 sh "docker-compose up -d --name ml-service luisdavidparra/ml-service:$IMAGE_TAG_STG --force-recreate" 
                 //sh "docker run -d --name ml-service -p 3000:3000 luisdavidparra/ml-service:$IMAGE_TAG_STG"
-                sleep 20
+                sleep 20*/
             }
         }
         stage ('User Acceptance Tests que SI pasara') {

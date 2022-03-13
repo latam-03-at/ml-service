@@ -7,6 +7,8 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('david_dockerhub')
+        IMAGE_TAG_STG = "$BUILD_NUMBER-stg"
+        IMAGE_TAG_PROD = "$BUILD_NUMBER-prod"
     }
     
     stages {
@@ -80,15 +82,28 @@ pipeline {
                 sh "docker-compose up -d"
             }
         }
-        
         stage ('User Acceptance Tests que SI pasara') {
             steps {
                 sh "curl -I 10.26.32.243:3000/api/v1/recognize-objects --silent | grep 404"
             }
         }
-        stage ('User Acceptance Tests que NO pasara') {
+        stage ('Tag Production Image') {
             steps {
-                sh "curl -I 10.26.32.243:3000/api/v1/recognize-objects --silent | grep 403453454"
+                sh "docker tag luisdavidparra/ml-service:$IMAGE_TAG_PROD"
+            }
+        }
+
+        stage('Deliver Image for Production') {
+            steps {
+                sh "docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW"
+                sh "docker push $FULL_IMAGE_NAME:$IMAGE_TAG_PROD"
+            }
+            post {
+                always {
+                    script {
+                        sh "docker logout"
+                    }
+                }
             }
         }
     }

@@ -33,15 +33,7 @@ pipeline {
         stage('Unit Tests & Coverage') {
             steps {
                 sh "npm test"
-            }/*
-            post {
-                always{
-                    script{
-                        sh "rm -rf ${WORKSPACE}/__test__/files"
-                        sh "rm -f ${WORKSPACE}/__test__/files.zip"
-                    }
-                }
-            }*/
+            }
         }
         stage('SonarQube analysis') {
             steps{
@@ -76,6 +68,7 @@ pipeline {
             }
         }
         //aqu termina Continuous Integration
+
         //aqui empezamos con Continuous Delivery
         stage('Deploy to staging'){
             steps {
@@ -117,7 +110,6 @@ pipeline {
                 always {
                     script {
                         sh "docker logout"
-                        sh 'docker rmi -f $(docker images -a | grep "ml-service")'
                     }
                 }
             }

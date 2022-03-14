@@ -67,9 +67,9 @@ pipeline {
                 }
             }
         }
-        //aqu termina Continuous Integration
+        //end of Continuous Integration
 
-        //aqui empezamos con Continuous Delivery
+        //start of Continuous Delivery
         stage('Deploy to staging'){
             steps {
                 sh "docker-compose up -d --scale ml-service=2 --force-recreate"

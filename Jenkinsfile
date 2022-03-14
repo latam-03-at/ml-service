@@ -87,7 +87,7 @@ pipeline {
                 sleep 20*/
             }
         }
-        stage ('User Acceptance Tests que SI pasara') {
+        stage ('User Acceptance Tests') {
             steps {
                 //sh "curl -i -X POST -H 'Content-type: multipart/form-data' -F images=@Downloads/dog.jpeg -F model="coco" -F object="dog" -F percentage=0.5 10.26.32.243:3000/api/v1/recognize-objects"
                 //sh "cd /Users/ubuntu/Downloads curl -i -X POST -H 'Content-type: multipart/form-data' -F images=@dog.jpg -F model="coco" -F object="dog" -F percentage=0.5 10.26.32.243:3000/api/v1/recognize-objects"
@@ -102,9 +102,10 @@ pipeline {
 
         stage('Deliver Image for Production') {
             steps {
-                sh "echo $DOCKER_HUB_CREDENTIALS_PSW' | docker login -u $DOCKER_HUB_CREDENTIALS_USR --password-stdin"
-                //sh "docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW"
-                sh "docker push $FULL_IMAGE_NAME:$IMAGE_TAG_PROD"
+                sh "docker build -t luisdavidparra/ml-service:$IMAGE_TAG_PROD  ."
+                //sh "echo $DOCKER_HUB_CREDENTIALS_PSW' | docker login -u $DOCKER_HUB_CREDENTIALS_USR --password-stdin"
+                sh "docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW"
+                sh "docker push luisdavidparra/ml-service:$IMAGE_TAG_PROD"
             }
             post {
                 always {

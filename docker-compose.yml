@@ -2,7 +2,7 @@ version: '3'
 
 services:
   machine-learning:
-    image: luisdavidparra/ml-service:latest
+    image: luisdavidparra/ml-service:$BUILD_NUMBER-stg
     container_name: ml-service
     build:
       context: ./

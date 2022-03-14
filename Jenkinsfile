@@ -18,6 +18,7 @@ pipeline {
                     //sh "ssh -o 'StrictHostKeyChecking no' calebespinoza@20.25.119.241 docker pull luisdavidparra/ml-service:$IMAGE_TAG_STG"
                     //sh "scp $ENV_FILE $SCRIPT $COMPOSE_FILE $PROD_SERVER:~/$FOLDER_NAME" //poner bien esos archivos
                     sh "ssh -o 'StrictHostKeyChecking no' calebespinoza@20.25.119.241 docker images"
+                    sh "ssh -o 'StrictHostKeyChecking no' calebespinoza@20.25.119.241 docker ps -a"
                 }
             }
         }

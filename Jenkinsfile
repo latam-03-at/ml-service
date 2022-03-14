@@ -108,29 +108,5 @@ pipeline {
             }
         }
         //end of continuous delivery
-        
-        /*
-        //Continuous Deployment Pipeline
-        stage ('Download Image') {
-            steps {
-                sshagent(['azure']) {
-                    sh "ssh -o 'StrictHostKeyChecking no' calebespinoza@20.25.119.241 docker pull luisdavidparra/ml-service:$IMAGE_TAG_STG"
-                    //sh "scp $ENV_FILE $SCRIPT $COMPOSE_FILE $PROD_SERVER:~/$FOLDER_NAME" //poner bien esos archivos
-                }
-            }
-        }
-        stage ('Copy files to Server') {
-            steps {
-                sshagent(['azure']) {
-                    sh "ssh -o 'StrictHostKeyChecking no' calebespinoza@20.25.119.241 mkdir -p /home/calebespinoza/ml"
-                    sh "scp validate-container.sh docker-compose.yml calebespinoza@20.25.119.241:~/ml"
-                }
-            }
-        }
-        stage('Deploy to server'){
-            steps {
-                sdfsdf
-            }
-            }*/
     }
 }

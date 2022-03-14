@@ -10,6 +10,7 @@ services:
     restart: always
     ports:
       - 3000:3000
+      - 3001:3000
     environment:
       PORT: 3000
       SERVER_URL: http://localhost:3000/api/v1

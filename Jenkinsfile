@@ -1,9 +1,5 @@
 pipeline {
     agent { label 'project' }
-    /*parameters {
-        choice(name: 'Environment', choices: ['Development', 'Production'], description: 'Choose an environment where deploy the Database')
-        string(name: 'BuildNumber', defaultValue: ':', description: '')
-    }*/
     tools {
         nodejs 'NodeJS'
     }
@@ -79,14 +75,12 @@ pipeline {
                 }
             }
         }
-        
+        //aqu termina Continuous Integration
         //aqui empezamos con Continuous Delivery
-        
         stage('Deploy to staging'){
             steps {
-                sh "docker-compose up -d --scale ml-service=1 --force-recreate"
+                sh "docker-compose up -d --scale ml-service=2 --force-recreate"
                 sleep 15
-                
                 //sh 'bash validate-container.sh' 
                 //sh "docker-compose up -d --name ml-service luisdavidparra/ml-service:$IMAGE_TAG_STG --force-recreate" 
                 //sh "docker run -d --name ml-service -p 3000:3000 luisdavidparra/ml-service:$IMAGE_TAG_STG"
@@ -144,10 +138,13 @@ pipeline {
                 sshagent(['azure']) {
                     sh "ssh -o 'StrictHostKeyChecking no' calebespinoza@20.25.119.241 mkdir -p /home/calebespinoza/ml"
                     sh "scp validate-container.sh docker-compose.yml calebespinoza@20.25.119.241:~/ml"
-                    sh
-
                 }
             }
-        }*/
+        }
+        stage('Deploy to server'){
+            steps {
+                sdfsdf
+            }
+            }*/
     }
 }

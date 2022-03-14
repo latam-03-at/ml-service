@@ -37,7 +37,7 @@ pipeline {
         stage('Unit Tests & Coverage') {
             steps {
                 sh "npm test"
-            }
+            }/*
             post {
                 always{
                     script{
@@ -45,7 +45,7 @@ pipeline {
                         sh "rm -f ${WORKSPACE}/__test__/files.zip"
                     }
                 }
-            }
+            }*/
         }
         stage('SonarQube analysis') {
             steps{
@@ -81,7 +81,7 @@ pipeline {
         }
         
         //aqui empezamos con Continuous Delivery
-        /*
+        
         stage('Deploy to staging'){
             steps {
                 sh "docker-compose up -d --scale ml-service=1 --force-recreate"
@@ -128,7 +128,8 @@ pipeline {
             }
         }
         //end of continuous delivery
-        */
+        
+        /*
         //Continuous Deployment Pipeline
         stage ('Download Image') {
             steps {
@@ -143,9 +144,10 @@ pipeline {
                 sshagent(['azure']) {
                     sh "ssh -o 'StrictHostKeyChecking no' calebespinoza@20.25.119.241 mkdir -p /home/calebespinoza/ml"
                     sh "scp validate-container.sh docker-compose.yml calebespinoza@20.25.119.241:~/ml"
-                    
+                    sh
+
                 }
             }
-        }
+        }*/
     }
 }

@@ -85,7 +85,7 @@ pipeline {
                 //sh "cd /Users/ubuntu/Downloads curl -i -X POST -H 'Content-type: multipart/form-data' -F images=@dog.jpg -F model="coco" -F object="dog" -F percentage=0.5 10.26.32.243:3000/api/v1/recognize-objects"
                 //sh "curl -I 10.26.32.243:3000/api/v1/recognize-objects --silent | grep 404"
                 sh "ls __test__/files/decompress"
-                sh "curl -i -X POST -H 'Content-type: multipart/form-data' -F images=@__test__/files/decompress/13.jpg -F model=coco -F object=dog -F percentage=0.5 10.26.32.243:3000/api/v1/recognize-objects"
+                sh "curl -i -X POST -H 'Content-type: multipart/form-data' -F images=@__test__/files/decompress/13.jpg -F model=coco -F object=dog -F percentage=0.5 10.26.32.243:3000/api/v1/recognize-objects | grep 200"
             }
             post {
                 always{

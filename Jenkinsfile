@@ -33,7 +33,7 @@ pipeline {
         }
         stage('Show test ls'){
             steps {
-                sh "ls __test__/files"
+                sh "ls __test__/files/decompress"
             }
             post {
                 always{

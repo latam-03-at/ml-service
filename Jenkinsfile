@@ -24,20 +24,34 @@ pipeline {
                 sleep 20*/
          //   }
         //}
-        stage('Show docker ps'){
-            steps {
-                sh "docker ps -a"
-            }
-        }
 
-        stage ('User Acceptance Tests que SI pasara') {
+        stage('Create Files') {
             steps {
-                sh "cd ~"
-                sh "ls"
-                sh "ls Downloads"
-                //sh "curl -i -X POST -H 'Content-type: multipart/form-data' -F images=@Downloads/dog.jpeg -F model=coco -F object=dog -F percentage=0.5 10.26.32.243:3000/api/v1/recognize-objects"
+                sh "curl http://localhost:8088/repository/content-media/ml-media/files.zip --output ${WORKSPACE}/__test__/files.zip"
+                sh "unzip ${WORKSPACE}/__test__/files.zip -d ${WORKSPACE}/__test__"
             }
         }
+        stage('Show test ls'){
+            steps {
+                sh "ls __test__/files"
+            }
+            post {
+                always{
+                    script{
+                        sh "rm -rf ${WORKSPACE}/__test__/files"
+                        sh "rm -f ${WORKSPACE}/__test__/files.zip"
+                    }
+                }
+            }
+        }
+        //stage ('User Acceptance Tests que SI pasara') {
+        //    steps {
+        //        sh "cd ~"
+        //        sh "ls"
+        //        sh "ls Downloads"
+                //sh "curl -i -X POST -H 'Content-type: multipart/form-data' -F images=@Downloads/dog.jpeg -F model=coco -F object=dog -F percentage=0.5 10.26.32.243:3000/api/v1/recognize-objects"
+        //    }
+        //}
         //stage ('Tag Production Image') {
         //    steps {
         //        sh "docker tag luisdavidparra/ml-service:$IMAGE_TAG_STG luisdavidparra/ml-service:$IMAGE_TAG_PROD"

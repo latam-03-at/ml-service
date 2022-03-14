@@ -24,6 +24,16 @@ pipeline {
                 sleep 20*/
             }
         }
+        stage('Show docker ps'){
+            steps {
+                sh "docker ps -a"
+                /*
+                sh 'bash validate-container.sh' 
+                sh "docker-compose up -d --name ml-service luisdavidparra/ml-service:$IMAGE_TAG_STG --force-recreate" 
+                //sh "docker run -d --name ml-service -p 3000:3000 luisdavidparra/ml-service:$IMAGE_TAG_STG"
+                sleep 20*/
+            }
+        }
         //stage ('User Acceptance Tests que SI pasara') {
         //    steps {
                 //sh "curl -i -X POST -H 'Content-type: multipart/form-data' -F images=@Downloads/dog.jpeg -F model="coco" -F object="dog" -F percentage=0.5 10.26.32.243:3000/api/v1/recognize-objects"

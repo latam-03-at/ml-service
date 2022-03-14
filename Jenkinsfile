@@ -38,6 +38,14 @@ pipeline {
             steps {
                 sh "npm test"
             }
+            post {
+                always{
+                    script{
+                        sh "rm -rf ${WORKSPACE}/__test__/files"
+                        sh "rm -f ${WORKSPACE}/__test__/files.zip"
+                    }
+                }
+            }
         }
         stage('SonarQube analysis') {
             steps{

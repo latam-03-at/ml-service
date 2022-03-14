@@ -15,8 +15,8 @@ pipeline {
         //aqui empezamos con CD
         stage('Deploy to staging'){
             steps {
-                sh "docker-compose up -d --scale ml-service=1 --force-recreate"
-                sleep 15
+                //sh "docker-compose up -d --scale ml-service=1 --force-recreate"
+                //sleep 15
                 /*
                 sh 'bash validate-container.sh' 
                 sh "docker-compose up -d --name ml-service luisdavidparra/ml-service:$IMAGE_TAG_STG --force-recreate" 
@@ -34,13 +34,12 @@ pipeline {
                 sleep 20*/
             }
         }
-        //stage ('User Acceptance Tests que SI pasara') {
-        //    steps {
-                //sh "curl -i -X POST -H 'Content-type: multipart/form-data' -F images=@Downloads/dog.jpeg -F model="coco" -F object="dog" -F percentage=0.5 10.26.32.243:3000/api/v1/recognize-objects"
-                //sh "cd /Users/ubuntu/Downloads curl -i -X POST -H 'Content-type: multipart/form-data' -F images=@dog.jpg -F model="coco" -F object="dog" -F percentage=0.5 10.26.32.243:3000/api/v1/recognize-objects"
-        //        sh "curl -I 10.26.32.243:3000/api/v1/recognize-objects --silent | grep 404"
-        //    }
-        //}
+
+        stage ('User Acceptance Tests que SI pasara') {
+            steps {
+                sh "curl -i -X POST -H 'Content-type: multipart/form-data' -F images=@Downloads/dog.jpeg -F model=coco -F object=dog -F percentage=0.5 10.26.32.243:3000/api/v1/recognize-objects"
+            }
+        }
         //stage ('Tag Production Image') {
         //    steps {
         //        sh "docker tag luisdavidparra/ml-service:$IMAGE_TAG_STG luisdavidparra/ml-service:$IMAGE_TAG_PROD"

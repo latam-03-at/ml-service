@@ -135,17 +135,17 @@ pipeline {
                 sshagent(['azure']) {
                     sh "ssh -o 'StrictHostKeyChecking no' calebespinoza@20.25.119.241 docker pull luisdavidparra/ml-service:$IMAGE_TAG_STG"
                     //sh "scp $ENV_FILE $SCRIPT $COMPOSE_FILE $PROD_SERVER:~/$FOLDER_NAME" //poner bien esos archivos
-                    sh "ssh -o 'StrictHostKeyChecking no' calebespinoza@20.25.119.241 mkdir -p /home/ubuntu/ml-service"
-                    sh "ssh -o 'StrictHostKeyChecking no' calebespinoza@20.25.119.241 ls -a /home/ubuntu/ml-service"
                 }
             }
-        }/*
-        stage ('Validate if container exists') {
+        }
+        stage ('Copy files to Server') {
             steps {
                 sshagent(['azure']) {
-
+                    sh "ssh -o 'StrictHostKeyChecking no' calebespinoza@20.25.119.241 mkdir -p /home/calebespinoza/ml"
+                    sh "scp validate-container.sh docker-compose.yml calebespinoza@20.25.119.241:~/ml"
+                    
                 }
             }
-        }*/
+        }
     }
 }

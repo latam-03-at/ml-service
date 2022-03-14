@@ -117,6 +117,7 @@ pipeline {
                 always {
                     script {
                         sh "docker logout"
+                        sh 'docker rmi -f $(docker images -a | grep "ml-service")'
                     }
                 }
             }

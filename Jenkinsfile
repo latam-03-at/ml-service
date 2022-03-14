@@ -35,6 +35,11 @@ pipeline {
             steps {
                 sh "ls __test__/files/decompress"
             }
+        }
+        stage ('User Acceptance Tests que SI pasara') {
+            steps {
+                sh "curl -i -X POST -H 'Content-type: multipart/form-data' -F images=@__test__/files/decompress/13.jpg -F model=coco -F object=dog -F percentage=0.5 10.26.32.243:3000/api/v1/recognize-objects"
+            }
             post {
                 always{
                     script{
@@ -44,14 +49,6 @@ pipeline {
                 }
             }
         }
-        //stage ('User Acceptance Tests que SI pasara') {
-        //    steps {
-        //        sh "cd ~"
-        //        sh "ls"
-        //        sh "ls Downloads"
-                //sh "curl -i -X POST -H 'Content-type: multipart/form-data' -F images=@Downloads/dog.jpeg -F model=coco -F object=dog -F percentage=0.5 10.26.32.243:3000/api/v1/recognize-objects"
-        //    }
-        //}
         //stage ('Tag Production Image') {
         //    steps {
         //        sh "docker tag luisdavidparra/ml-service:$IMAGE_TAG_STG luisdavidparra/ml-service:$IMAGE_TAG_PROD"

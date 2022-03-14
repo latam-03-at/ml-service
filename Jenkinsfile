@@ -12,17 +12,10 @@ pipeline {
     }
     
     stages {
-        stage('Python') {
-            steps {
-                echo "install python"
-                sh "sudo apt-get install -y python build-essential"
-                sh "python -V"
-            }
-        }
         //aqui empezamos con CD
         stage('Deploy to staging'){
             steps {
-                sh "docker-compose up -d --name ml-service --scale ml-service=1 --force-recreate"
+                sh "docker-compose up -d --scale ml-service=1 --force-recreate"
                 sleep 15
                 /*
                 sh 'bash validate-container.sh' 

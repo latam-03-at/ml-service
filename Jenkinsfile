@@ -1,6 +1,9 @@
 pipeline {
     agent { label 'project' }
-
+    /*parameters {
+        choice(name: 'Environment', choices: ['Development', 'Production'], description: 'Choose an environment where deploy the Database')
+        string(name: 'BuildNumber', defaultValue: ':', description: '')
+    }*/
     tools {
         nodejs 'NodeJS'
     }
@@ -12,6 +15,7 @@ pipeline {
     }
     
     stages {
+        //Continuous Integration
         stage('Python') {
             steps {
                 echo "install python"
@@ -67,16 +71,18 @@ pipeline {
                 }
             }
         }
-        //aqui empezamos con CD
+        
+        //aqui empezamos con Continuous Delivery
+        /*
         stage('Deploy to staging'){
             steps {
                 sh "docker-compose up -d --scale ml-service=1 --force-recreate"
                 sleep 15
-                /*
-                sh 'bash validate-container.sh' 
-                sh "docker-compose up -d --name ml-service luisdavidparra/ml-service:$IMAGE_TAG_STG --force-recreate" 
+                
+                //sh 'bash validate-container.sh' 
+                //sh "docker-compose up -d --name ml-service luisdavidparra/ml-service:$IMAGE_TAG_STG --force-recreate" 
                 //sh "docker run -d --name ml-service -p 3000:3000 luisdavidparra/ml-service:$IMAGE_TAG_STG"
-                sleep 20*/
+                //sleep 20
             }
         }
         stage ('User Acceptance Tests') {
@@ -100,11 +106,8 @@ pipeline {
                 sh "docker tag luisdavidparra/ml-service:$IMAGE_TAG_STG luisdavidparra/ml-service:$IMAGE_TAG_PROD"
             }
         }
-
         stage('Deliver Image for Production') {
             steps {
-                //sh "docker build -t luisdavidparra/ml-service:$IMAGE_TAG_PROD  ."
-                //sh "echo $DOCKER_HUB_CREDENTIALS_PSW' | docker login -u $DOCKER_HUB_CREDENTIALS_USR --password-stdin"
                 sh "docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW"
                 sh "docker push luisdavidparra/ml-service:$IMAGE_TAG_PROD"
             }
@@ -116,5 +119,22 @@ pipeline {
                 }
             }
         }
+        //end of continuous delivery
+        */
+        //Continuous Deployment Pipeline
+        stage ('Download Image') {
+            steps {
+                sshagent(['azure']) {
+                    sh "ssh -o 'StrictHostKeyChecking no' calebespinoza@20.25.119.241 docker pull luisdavidparra/ml-service:$IMAGE_TAG_PROD"
+                    //sh "scp $ENV_FILE $SCRIPT $COMPOSE_FILE $PROD_SERVER:~/$FOLDER_NAME" //poner bien esos archivos
+                    sh "docker images"
+                }
+            }
+        }/*
+        stage ('Validate if container exists') {
+            steps {
+                sshagent(['azure'])
+            }
+        }*/
     }
 }

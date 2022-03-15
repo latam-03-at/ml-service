@@ -109,7 +109,7 @@ pipeline {
         }
         //end of continuous delivery
         //continuous deployment
-        /*
+        
         stage('Copy files to Server') {
             environment {
                 PROD_SERVER = "atuser@20.25.80.241"
@@ -138,6 +138,6 @@ pipeline {
                     sh "ssh -o 'StrictHostKeyChecking no' $PROD_SERVER docker-compose up -d"
                 }
             }
-        }*/
+        }
     }
 }

@@ -2,6 +2,7 @@ version: '3'
 
 services:
   machine-learning:
+    image: luisdavidparra/ml-service:$BUILD_NUMBER-stg
     container_name: ml-service
     build:
       context: ./
@@ -9,6 +10,7 @@ services:
     restart: always
     ports:
       - 3000:3000
+      - 3001:3000
     environment:
       PORT: 3000
       SERVER_URL: http://localhost:3000/api/v1

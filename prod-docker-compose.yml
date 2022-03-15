@@ -4,9 +4,6 @@ services:
   machine-learning:
     image: luisdavidparra/ml-service:$TAG_PROD
     container_name: ml-service
-    build:
-      context: ./
-      dockerfile: Dockerfile
     restart: always
     ports:
       - 3000:3000

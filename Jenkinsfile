@@ -120,7 +120,7 @@ pipeline {
             steps {
                 sshagent(['prod-key']) {
                     sh "ssh -o 'StrictHostKeyChecking no' $PROD_SERVER mkdir -p /home/atuser/$FOLDER_NAME"
-                    sh "scp /home/ubuntu/Documents/ml-service/validate-container.sh /home/ubuntu/Documents/ml-service/docker-compose.yml $SERVER_DEV:/home/atuser/$FOLDER_NAME"
+                    sh "scp ${WORKSPACE}/validate-container.sh ${WORKSPACE}/docker-compose.yml $SERVER_DEV:/home/atuser/$FOLDER_NAME"
                     sh "ssh -o 'StrictHostKeyChecking no' $PROD_SERVER ls -a /home/atuser/$FOLDER_NAME"
                 }
             }

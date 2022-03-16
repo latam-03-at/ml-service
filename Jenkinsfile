@@ -71,12 +71,14 @@ pipeline {
 
         //start of Continuous Delivery
         stage('Deploy to staging'){
+            when{branch 'main'}
             steps {
                 sh "docker-compose up -d --scale ml-service=2 --force-recreate"
                 sleep 15
             }
         }
         stage ('User Acceptance Tests') {
+            when{branch 'main'}
             steps {
                 sh "curl -i -X POST -H 'Content-type: multipart/form-data' -F images=@__test__/files/decompress/13.jpg -F model=coco -F object=dog -F percentage=0.5 10.26.32.243:3000/api/v1/recognize-objects | grep 200"
             }
@@ -90,11 +92,13 @@ pipeline {
             }
         }
         stage ('Tag Production Image') {
+            when{branch 'main'}
             steps {
                 sh "docker tag luisdavidparra/ml-service:$IMAGE_TAG_STG luisdavidparra/ml-service:$IMAGE_TAG_PROD"
             }
         }
         stage('Deliver Image for Production') {
+            when{branch 'main'}
             steps {
                 sh "docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW"
                 sh "docker push luisdavidparra/ml-service:$IMAGE_TAG_PROD"
@@ -110,12 +114,14 @@ pipeline {
         //end of continuous delivery
         //continuous deployment
         stage('Create env file'){
+            when{branch 'main'}
             steps{
                 sh "echo 'TAG_PROD=${BUILD_NUMBER}-prod' > .env"
             }
         }
         
         stage('Copy files to Server') {
+            when{branch 'main'}
             environment {
                 PROD_SERVER = "atuser@20.25.80.241"
                 FOLDER_NAME = "ml-service"
@@ -130,6 +136,7 @@ pipeline {
             }
         }
         stage('Deploy in prod server') {
+            when{branch 'main'}
             environment {
                 PROD_SERVER = "atuser@20.25.80.241"
                 FOLDER_NAME = "ml-service"

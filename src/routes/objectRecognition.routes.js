@@ -17,5 +17,5 @@ const {uploadImagesMiddleware} = require('../middlewares/multer.middleware');
 
 // Routes to handle the request of the object recognition endpoint
 router.post('/recognize-objects', uploadImagesMiddleware(), ObjectRecognitionController.recognizeObject);
-//router.get("/hello-world", (req, res) => {res.send("Hello World!!")});
+router.get("/hello-world", (req, res) => {res.send("Hello World!!")});
 module.exports = router;

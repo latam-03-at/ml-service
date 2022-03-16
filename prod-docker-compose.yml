@@ -2,7 +2,7 @@ version: '3'
 
 services:
   machine-learning:
-    image: luisdavidparra/ml-service:$BUILD_NUMBER-stg
+    image: luisdavidparra/ml-service:$TAG_PROD
     container_name: ml-service
     restart: always
     ports:

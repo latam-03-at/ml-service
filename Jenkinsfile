@@ -108,5 +108,38 @@ pipeline {
             }
         }
         //end of continuous delivery
+        //continuous deployment
+        stage('Create env file'){
+            steps{
+                sh "echo 'TAG_PROD=${BUILD_NUMBER}-prod' > .env"
+            }
+        }
+        
+        stage('Copy files to Server') {
+            environment {
+                PROD_SERVER = "atuser@20.25.80.241"
+                FOLDER_NAME = "ml-service"
+            }
+            steps {
+                sshagent(['prod-key2']) {
+                    sh "ssh -o 'StrictHostKeyChecking no' $PROD_SERVER mkdir -p /home/atuser/$FOLDER_NAME"
+                    sh "scp ${WORKSPACE}/validate-container.sh ${WORKSPACE}/prod-docker-compose.yml $PROD_SERVER:/home/atuser/$FOLDER_NAME"
+                    sh "scp ${WORKSPACE}/.env $PROD_SERVER:/home/atuser/"
+                    sh "ssh -o 'StrictHostKeyChecking no' $PROD_SERVER ls -a /home/atuser/$FOLDER_NAME"
+                }
+            }
+        }
+        stage('Deploy in prod server') {
+            environment {
+                PROD_SERVER = "atuser@20.25.80.241"
+                FOLDER_NAME = "ml-service"
+            }
+            steps {
+                sshagent(['prod-key2']) {
+                    sh "ssh -o 'StrictHostKeyChecking no' $PROD_SERVER bash /home/atuser/$FOLDER_NAME/validate-container.sh"
+                    sh "ssh -o 'StrictHostKeyChecking no' $PROD_SERVER docker-compose -f /home/atuser/$FOLDER_NAME/prod-docker-compose.yml up -d"
+                }
+            }
+        }
     }
 }
